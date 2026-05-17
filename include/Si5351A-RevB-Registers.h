@@ -258,37 +258,34 @@ static const si5351a_revb_register_t si5351a_revb_registers[SI5351A_REVB_REG_CON
     /*
      * Phase offset registers.
      *
-     * These set the approximate quadrature relationship between CLK0
-     * and CLK1.
+     * CLK0 and CLK1 are used as the mixer clock pair, so they should be
+     * approximately 90 degrees apart.
      *
-     * Important:
+     * MultiSynth0 and MultiSynth1 set the CLK0/CLK1 output frequency.
+     * The PHOFF registers set the relative phase offset between them.
      *
-     *   MultiSynth0 and MultiSynth1 set the frequencies.
-     *   PHOFF registers set the relative phase.
+     * For this register map:
      *
-     * Here:
+     *   PLLA ~= 893.9022 MHz
+     *   CLK0/CLK1 = 7.0386 MHz
+     *
+     * The Si5351 phase offset count is based on the PLL VCO clock.
+     *
+     * Approximate 90 degree offset:
+     *
+     *   phase_count = Fvco / Fout
+     *               ~= 893.9022 MHz / 7.0386 MHz
+     *               ~= 127
+     *               ~= 0x7F
+     *
+     * The current ClockBuilder/lab value is:
      *
      *   CLK0_PHOFF = 0x83
      *   CLK1_PHOFF = 0x00
      *
-     * Therefore CLK0 is shifted relative to CLK1.
-     */
-     
-     /*
-     * Phase offset registers.
-     *
-     * The intended relationship is approximate quadrature between CLK0
-     * and CLK1.
-     *
-     * For PLLA ~= 893.9022 MHz and CLK0/CLK1 = 7.0386 MHz:
-     *
-     *   90 degree delay count = Fvco / Fout = 127 = 0x7F
-     *
-     * The current ClockBuilder/lab value for CLK0_PHOFF is 0x83.
-     * If interpreted as decimal 131, this corresponds to about 92.8 degrees.
-     *
-     * CLK1_PHOFF = 0x00, so CLK1 is the reference and CLK0 is delayed
-     * relative to CLK1.
+     * 0x83 is decimal 131, which is close to the calculated 90 degree
+     * count. So CLK0 is delayed relative to CLK1 by approximately one
+     * quarter cycle.
      */
     { 0xA2, 0x00 },
     { 0xA3, 0x00 },

@@ -213,17 +213,17 @@ do
     logfile="logs/tx_logs/tx_$(date +%Y%m%d_%H%M%S).log"
 
     #
+    # Wait until the exact next WSPR slot.
+    #
+    echo "Waiting $wait_time seconds for next WSPR slot..."
+    sleep "$wait_time"
+
+    #
     # Print what will happen.
     #
     echo "Starting TX/RX at $(date)"
     echo "Message: $CALLSIGN $LOCATOR $POWER"
     echo "TX log: $logfile"
-    echo "Waiting $wait_time seconds for next WSPR slot..."
-
-    #
-    # Wait until the exact next WSPR slot.
-    #
-    sleep "$wait_time"
 
     #
     # Start transmitter in the background.

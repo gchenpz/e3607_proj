@@ -1,4 +1,4 @@
-# e3607_proj
+# WSPR Transceiver
 
 ELEC3607 Group Project — hardwired-loopback WSPR transmitter and decoder test.
 
